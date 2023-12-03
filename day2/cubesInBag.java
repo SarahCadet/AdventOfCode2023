@@ -1,3 +1,5 @@
+package day2;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -10,7 +12,7 @@ import java.util.Scanner;
  */
 public class cubesInBag {
   public static void main(String[] args) {
-    File input = new File("./inputCubes.txt");
+    File input = new File("./day2/inputCubes.txt");
     Scanner inputFileReader = null;
     try {
       inputFileReader = new Scanner(input);
@@ -29,15 +31,21 @@ public class cubesInBag {
     int sum = 0;
     while (fR.hasNextLine()) {
       String line = fR.nextLine();
-      String[] lineSplit = removeCommasAndColon(line).split(" ");
+      line = removeCommasAndColon(line);
+      String[] lineSplit = line.split(" ");
       int id = Integer.valueOf(lineSplit[1]);
       // gotta check each round
       String[] rounds = line.split(";");
+      boolean goodGame = true;
       for (String r : rounds) {
-
+        if (!validRound(r)) {
+          goodGame = false;
+          break;
+        }
       }
-      // if isvalid sum+=id
-      sum += id;
+      if (goodGame) {
+        sum += id;
+      }
     }
     return sum;
   }
@@ -52,15 +60,14 @@ public class cubesInBag {
     return result;
   }
 
-  public static int isValidId(String line) {
-    int val = 0;
+  public static boolean validRound(String r) {
     HashMap<String, Integer> count = new HashMap<>();
     count.put("red", 0);
     count.put("blue", 0);
     count.put("green", 0);
     // string array; loop through for keywords and use that to add appropriate
     // values
-    String[] lineSplit = line.split(" ");
+    String[] lineSplit = r.split(" ");
     for (int i = 1; i < lineSplit.length; i++) {
       String amount = lineSplit[i - 1];
       switch (lineSplit[i]) {
@@ -78,10 +85,8 @@ public class cubesInBag {
           break;
       }
     }
-    if (possible(count.get("red"), count.get("green"), count.get("blue"))) {
-      val = Integer.valueOf(lineSplit[1]);
-    }
-    return val;
+
+    return possible(count.get("red"), count.get("green"), count.get("blue"));
   }
 
   public static boolean possible(Integer i, Integer j, Integer k) {
