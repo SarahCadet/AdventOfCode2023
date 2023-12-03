@@ -29,8 +29,15 @@ public class cubesInBag {
     int sum = 0;
     while (fR.hasNextLine()) {
       String line = fR.nextLine();
-      line = removeCommasAndColon(line);
-      sum += isValidId(line);
+      String[] lineSplit = removeCommasAndColon(line).split(" ");
+      int id = Integer.valueOf(lineSplit[1]);
+      // gotta check each round
+      String[] rounds = line.split(";");
+      for (String r : rounds) {
+
+      }
+      // if isvalid sum+=id
+      sum += id;
     }
     return sum;
   }
