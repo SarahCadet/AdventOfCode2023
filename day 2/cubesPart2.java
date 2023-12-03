@@ -1,8 +1,5 @@
-package day2;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -10,7 +7,7 @@ import java.util.Scanner;
  * The Elf would first like to know which games would have been possible 
  * if the bag contained only 12 red cubes, 13 green cubes, and 14 blue cubes?
  */
-public class cubesInBag {
+public class cubesPart2 {
   public static void main(String[] args) {
     File input = new File("./day2/inputCubes.txt");
     Scanner inputFileReader = null;
@@ -20,10 +17,10 @@ public class cubesInBag {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    System.out.println(sumOfValidGameIds(inputFileReader));
+    System.out.println(sumOfPowers(inputFileReader));
   }
 
-  public static int sumOfValidGameIds(Scanner fR) {
+  public static int sumOfPowers(Scanner fR) {
     if (fR == null) {
       System.out.println("NULL File Reader !!!");
       return 0;
@@ -31,65 +28,60 @@ public class cubesInBag {
     int sum = 0;
     while (fR.hasNextLine()) {
       String line = fR.nextLine();
-      line = removeCommasAndColon(line);
-      String[] lineSplit = line.split(" ");
-      int id = Integer.valueOf(lineSplit[1]);
-      // gotta check each round
-      String[] rounds = line.split(";");
-      boolean goodGame = true;
-      for (String r : rounds) {
-        if (!validRound(r)) {
-          goodGame = false;
-          break;
-        }
-      }
-      if (goodGame) {
-        sum += id;
-      }
+      line = removeCommasSemiAndColon(line);
+      System.out.println(line);
+      sum += gamePower(line);
+
     }
     return sum;
   }
 
-  public static String removeCommasAndColon(String line) {
+  public static String removeCommasSemiAndColon(String line) {
     String result = "";
     for (char c : line.toCharArray()) {
-      if (c != ',' && c != ':') {
+      if (c != ';' && c != ',' && c != ':') {
         result += c;
       }
     }
     return result;
   }
 
-  public static boolean validRound(String r) {
+  public static int gamePower(String r) {
     HashMap<String, Integer> count = new HashMap<>();
-    count.put("red", 0);
-    count.put("blue", 0);
-    count.put("green", 0);
+    count.put("red", Integer.MIN_VALUE);
+    count.put("blue", Integer.MIN_VALUE);
+    count.put("green", Integer.MIN_VALUE);
     // string array; loop through for keywords and use that to add appropriate
     // values
     String[] lineSplit = r.split(" ");
     for (int i = 1; i < lineSplit.length; i++) {
-      String amount = lineSplit[i - 1];
+      Integer amount = null;
       switch (lineSplit[i]) {
         case "red":
+          amount = Integer.valueOf(lineSplit[i - 1]);
           Integer curr1 = count.get("red");
-          count.replace("red", curr1 + Integer.valueOf(amount));
+          if (amount > curr1) {
+            count.replace("red", amount);
+          }
           break;
         case "blue":
+          amount = Integer.valueOf(lineSplit[i - 1]);
           Integer curr2 = count.get("blue");
-          count.replace("blue", curr2 + Integer.valueOf(amount));
+          if (amount > curr2) {
+            count.replace("blue", amount);
+          }
           break;
         case "green":
+          amount = Integer.valueOf(lineSplit[i - 1]);
           Integer curr3 = count.get("green");
-          count.replace("green", curr3 + Integer.valueOf(amount));
+          if (amount > curr3) {
+            count.replace("green", amount);
+          }
           break;
       }
     }
-
-    return possible(count.get("red"), count.get("green"), count.get("blue"));
-  }
-
-  public static boolean possible(Integer i, Integer j, Integer k) {
-    return i <= 12 && j <= 13 && k <= 14;
+    int power = count.get("red") * count.get("blue") * count.get("green");
+    System.out.println(power);
+    return power;
   }
 }
