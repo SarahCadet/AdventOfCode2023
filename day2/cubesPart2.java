@@ -1,3 +1,5 @@
+package day2;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -9,7 +11,7 @@ import java.util.Scanner;
  */
 public class cubesPart2 {
   public static void main(String[] args) {
-    File input = new File("./day2/inputCubes.txt");
+    File input = new File("./day 2/inputCubes.txt");
     Scanner inputFileReader = null;
     try {
       inputFileReader = new Scanner(input);

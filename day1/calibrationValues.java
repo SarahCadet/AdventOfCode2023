@@ -1,3 +1,5 @@
+package day1;
+
 public class calibrationValues {
   public static String[] wordNums = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
